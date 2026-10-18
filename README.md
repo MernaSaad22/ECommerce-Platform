@@ -1,6 +1,18 @@
 # 🛒 Enterprise E-Commerce Platform
 
+🎬 **[Watch the Full Project Demo Video Here](https://drive.google.com/drive/folders/1ETy2OlrRTI7qEdrn62LaDM-3x97JLnRb?usp=sharing)**
+
 A fully-featured, enterprise-grade E-Commerce web application built with **ASP.NET Core MVC (.NET 9)** and **Entity Framework Core**. This project is engineered with clean architecture principles, emphasizing security, performance, and seamless payment integration.
+
+---
+
+## 📸 Project Showcase
+
+| 🛍️ Customer Experience | 👨‍💻 Admin Dashboard & Security |
+| :---: | :---: |
+| **Home Page & Dynamic Filters**<br>![Home](Screenshot%202026-10-18%20192304.png) | **Product Management (CRUD)**<br>![Products](Screenshot%202026-10-18%20204358.png) |
+| **Shopping Cart & Order Summary**<br>![Cart](Screenshot%202026-10-18%20204122.png) | **User Management & Instant Block**<br>![Users](Screenshot%202026-10-18%20204641.png) |
+| **Secure Payment Integration**<br>![Stripe](Screenshot%202026-10-18%20204316.png) | **Product Details**<br>![Details](Screenshot%202026-10-18%20204714.png) |
 
 ---
 
