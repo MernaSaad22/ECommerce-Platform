@@ -1,0 +1,93 @@
+﻿
+
+@model RegisterVM
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title text-center">
+                        <i class="fas fa-user-plus me-2"></i>Create Account
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label asp-for="UserName" class="form-label">Username *</label>
+                            <input asp-for="UserName" class="form-control" placeholder="Enter username" required>
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label">Email *</label>
+                            <input asp-for="Email" type="email" class="form-control" placeholder="Enter email" required>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label">Password *</label>
+                            <input asp-for="Password" type="password" class="form-control" placeholder="Enter password" required>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ConfirmPassword" class="form-label">Confirm Password *</label>
+                            <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm password" required>
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Address" class="form-label">Address</label>
+                            <input asp-for="Address" class="form-control" placeholder="Enter address">
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Age" class="form-label">Age</label>
+                            <input asp-for="Age" type="number" class="form-control" placeholder="Enter age">
+                            <span asp-validation-for="Age" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-user-plus me-1"></i> Register
+                            </button>
+                            <a asp-action="Login" class="btn btn-outline-secondary">
+                                <i class="fas fa-sign-in-alt me-1"></i> Already have an account?
+                            </a>
+                        </div>
+                        <div class="alert alert-info">
+                            Didn't get the email? <a asp-action="ResendEmail">Click here to resend</a>.
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Form validation
+        (function () {
+            'use strict'
+            const forms = document.querySelectorAll('.needs-validation')
+
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
+}

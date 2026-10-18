@@ -1,0 +1,293 @@
+﻿@model ProductWithFilterVM
+
+@{
+    ViewData["Title"] = "Home | Modern Shop";
+    var discountLimit = 60;
+}
+
+@section Styles {
+    <style>
+        :root {
+            --primary-color: #6c5ce7;
+            --secondary-color: #a29bfe;
+            --dark-color: #2d3436;
+            --light-color: #f5f6fa;
+            --accent-color: #fd79a8;
+            --success-color: #00b894;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" fill="white"></path><path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" fill="white"></path><path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" fill="white"></path></svg>') no-repeat;
+            background-size: cover;
+        }
+        
+        .filter-bar {
+            background-color: white;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border-radius: 12px;
+            margin-top: -2rem;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .product-card {
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .badge-category {
+            background-color: var(--primary-color);
+        }
+        
+        .badge-discount {
+            background-color: var(--accent-color);
+        }
+        
+        .price {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .old-price {
+            color: #b2bec3;
+        }
+        
+        .pagination .page-item.active .page-link {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .pagination .page-link {
+            color: var(--primary-color);
+        }
+        
+        .no-items {
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #b2bec3;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+    </style>
+}
+
+@section Scripts {
+    @if (TempData["Notification"] is not null)
+    {
+        <script>
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: '@TempData["Notification"]',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        </script>
+    }
+}
+
+<!-- Modern Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row hero-content text-center">
+            <div class="col-12">
+                <h1 class="display-4 fw-bold mb-4">Discover Amazing Products</h1>
+                <p class="lead mb-5">Shop the latest trends with exclusive discounts and fast delivery</p>
+                <a href="#products" class="btn btn-light btn-lg px-4">Shop Now</a>
+            </div>
+        </div>
+    </div>
+    <div class="hero-wave"></div>
+</section>
+
+<!-- Modern Filter Section -->
+<section class="py-4 filter-bar">
+    <div class="container">
+        <form action="/Customer/Home/Index">
+            <div class="row g-3 align-items-center">
+                <!-- Product Name -->
+                <div class="col-md-3">
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent"><i class="bi bi-search"></i></span>
+                        <input type="text" class="form-control border-start-0" placeholder="Search products..." name="productName" value="@Model.FilterItemsVM.ProductName">
+                    </div>
+                </div>
+
+                <!-- Price Range -->
+                <div class="col-md-2">
+                    <input type="number" class="form-control" placeholder="Min $" name="minPrice" value="@Model.FilterItemsVM.MinPrice">
+                </div>
+                <div class="col-md-2">
+                    <input type="number" class="form-control" placeholder="Max $" name="maxPrice" value="@Model.FilterItemsVM.MaxPrice">
+                </div>
+
+                <!-- Category -->
+                <div class="col-md-3">
+                    <select name="CategoryId" class="form-select">
+                        <option value="">All Categories</option>
+                        @foreach(var item in Model.Categories)
+                        {
+                            if (@Model.FilterItemsVM.CategoryId == item.Id)
+                            {
+                                <option value="@item.Id" selected>@item.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-funnel-fill me-2"></i>Filter
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<!-- Product Grid Section -->
+<section id="products" class="py-5">
+    <div class="container">
+        @if(Model.Products.Count == 0)
+        {
+            <div class="no-items">
+                <div class="text-center">
+                    <i class="bi bi-exclamation-circle display-4 mb-3"></i>
+                    <h3>No products found</h3>
+                    <p class="text-muted">Try adjusting your search or filter criteria</p>
+                </div>
+            </div>
+        } 
+        else
+        {
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+                @foreach (var item in Model.Products)
+                {
+                    <div class="col">
+                        <div class="card h-100 product-card">
+                            <!-- Badges -->
+                            <div class="position-absolute top-0 end-0 m-2">
+                                <span class="badge badge-category">@item.Category.Name</span>
+                            </div>
+                            @if (item.Discount > discountLimit)
+                            {
+                                <div class="position-absolute top-0 start-0 m-2">
+                                    <span class="badge badge-discount">@item.Discount% OFF</span>
+                                </div>
+                            }
+                            
+                            <!-- Product Image -->
+                            <a href="/Customer/Home/Details/@item.Id">
+                                <img class="card-img-top p-3" src="~/images/@item.MainImg" alt="@item.Name" style="height: 200px; object-fit: contain;">
+                            </a>
+                            
+                            <!-- Product Body -->
+                            <div class="card-body pt-0">
+                                <h5 class="card-title mb-1">@item.Name</h5>
+                                
+                                <!-- Rating -->
+                                <div class="d-flex mb-2">
+                                    <div class="text-warning small">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-half"></i>
+                                    </div>
+                                    <small class="text-muted ms-2">(24)</small>
+                                </div>
+                                
+                                <!-- Price -->
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span class="text-muted old-price"><del>@item.Price.ToString("c")</del></span>
+                                        <span class="price fs-5">@((item.Price - (item.Price * item.Discount / 100)).ToString("c"))</span>
+
+                                    </div>
+                                    @if (item.Quantity > 0)
+                                    {
+                                        <span class="badge bg-success">In Stock</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">Out of Stock</span>
+                                    }
+                                </div>
+                            </div>
+                            
+                            <!-- Product Footer -->
+                            <div class="card-footer bg-transparent border-top-0">
+                                <div class="d-grid gap-2">
+                                    <a href="/Customer/Home/Details/@item.Id" class="btn btn-outline-primary">
+                                        <i class="bi bi-eye-fill me-2"></i>View Details
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <!-- Pagination -->
+            @if (Model.TotalPageNumber > 1)
+            {
+                <nav class="mt-5">
+                    <ul class="pagination justify-content-center">
+                        @for (int i = 1; i <= Model.TotalPageNumber; i++)
+                        {
+                            <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                                <a class="page-link" href="/Customer/Home/Index?page=@i">@i</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            }
+
+        }
+    </div>
+</section>

@@ -1,0 +1,205 @@
+﻿
+
+@model Product
+
+@{
+    ViewData["Title"] = "Create New Product";
+}
+
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mt-4">
+            <i class="fas fa-plus-circle me-2"></i>@ViewData["Title"]
+        </h1>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i> Back to Products
+        </a>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <i class="fas fa-box-open me-1"></i>
+            Product Details
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                <div class="row">
+                    <!-- Left Column -->
+                    <div class="col-md-6">
+                        <!-- Basic Information -->
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label fw-bold">Product Name *</label>
+                            <input asp-for="Name" class="form-control" placeholder="Enter product name" required>
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                            <div class="invalid-feedback">Please provide a product name.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label fw-bold">Description</label>
+                            <textarea asp-for="Description" class="form-control" rows="4"
+                                      placeholder="Enter product description"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <!-- Pricing -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Price" class="form-label fw-bold">Price *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input asp-for="Price" type="number" step="0.01" class="form-control"
+                                           placeholder="0.00" min="0" required>
+                                </div>
+                                <span asp-validation-for="Price" class="text-danger"></span>
+                                <div class="invalid-feedback">Please provide a valid price.</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Discount" class="form-label fw-bold">Discount</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">%</span>
+                                    <input asp-for="Discount" type="number" class="form-control"
+                                           placeholder="0" min="0" max="100">
+                                </div>
+                                <span asp-validation-for="Discount" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="col-md-6">
+                        <!-- Image Upload -->
+                        <div class="mb-3">
+                            <label asp-for="MainImg" class="form-label fw-bold">Product Image *</label>
+                            <input asp-for="MainImg" type="file" class="form-control"
+                                   accept="image/*" onchange="previewImage(event)" required>
+                            <span asp-validation-for="MainImg" class="text-danger"></span>
+                            <div class="invalid-feedback">Please select a product image.</div>
+                            <small class="text-muted">Recommended size: 800x800px, Max size: 2MB</small>
+
+                            <div class="image-preview mt-3 text-center">
+                                <img id="imgPreview" src="#" alt="Image Preview"
+                                     class="img-thumbnail" style="display: none; max-height: 200px; max-width: 100%;">
+                                <div id="noImagePlaceholder" class="text-muted p-3 border rounded"
+                                     style="display: block; height: 200px; line-height: 200px;">
+                                    No image selected
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Inventory -->
+                        <div class="mb-3">
+                            <label asp-for="Quantity" class="form-label fw-bold">Stock Quantity *</label>
+                            <input asp-for="Quantity" type="number" class="form-control"
+                                   placeholder="0" min="0" required>
+                            <span asp-validation-for="Quantity" class="text-danger"></span>
+                            <div class="invalid-feedback">Please provide a valid quantity.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Row -->
+                <div class="row mt-2">
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="CategoryId" class="form-label fw-bold">Category *</label>
+                        <select asp-for="CategoryId" asp-items="ViewBag.categories" class="form-select" required>
+                            <option value="" disabled selected>-- Select Category --</option>
+                        </select>
+                        <span asp-validation-for="CategoryId" class="text-danger"></span>
+                        <div class="invalid-feedback">Please select a category.</div>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="BrandId" class="form-label fw-bold">Brand *</label>
+                        <select asp-for="BrandId" asp-items="ViewBag.brands" class="form-select" required>
+                            <option value="" disabled selected>-- Select Brand --</option>
+                        </select>
+                        <span asp-validation-for="BrandId" class="text-danger"></span>
+                        <div class="invalid-feedback">Please select a brand.</div>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="Status" class="form-label fw-bold">Status *</label>
+                        <select asp-for="Status" class="form-select" required>
+                            <option value="true">Active</option>
+                            <option value="false">Inactive</option>
+                        </select>
+                        <span asp-validation-for="Status" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                    <button type="reset" class="btn btn-outline-secondary me-md-2">
+                        <i class="fas fa-undo me-1"></i> Reset
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-1"></i> Create Product
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Image preview function
+        function previewImage(event) {
+            const input = event.target;
+            const preview = document.getElementById('imgPreview');
+            const placeholder = document.getElementById('noImagePlaceholder');
+
+            if (input.files && input.files[0]) {
+                const fileSize = input.files[0].size / 1024 / 1024; // in MB
+                if (fileSize > 2) {
+                    alert('Image size exceeds 2MB limit');
+                    input.value = '';
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    placeholder.style.display = 'none';
+                }
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                preview.style.display = 'none';
+                placeholder.style.display = 'block';
+            }
+        }
+
+        // Form validation
+        (function () {
+            'use strict'
+            const forms = document.querySelectorAll('.needs-validation')
+
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
+}
+
+<style>
+    .image-preview {
+        background-color: #f8f9fa;
+        border-radius: 0.25rem;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #86b7fe;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+
+    .required-field::after {
+        content: " *";
+        color: red;
+    }
+</style>

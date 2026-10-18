@@ -1,0 +1,364 @@
+﻿@model ProductWithRelatedVM
+
+<!-- Enhanced Product Section -->
+<section class="py-5 bg-white">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            <!-- Product Images (Enhanced) -->
+            <div class="col-md-6">
+                <div class="product-image-container mb-5 mb-md-0">
+                    <img class="img-fluid rounded-3 shadow-lg mb-4"
+                         src="~/images/@Model.Product.MainImg"
+                         alt="@Model.Product.Name" />
+
+                    <!-- Thumbnail Gallery -->
+                    <div class="d-flex justify-content-center gap-2">
+                        <img src="~/images/@Model.Product.MainImg"
+                             class="img-thumbnail active-thumbnail"
+                             width="80"
+                             onclick="changeMainImage(this)" />
+                        <img src="~/images/@Model.Product.MainImg"
+                             class="img-thumbnail"
+                             width="80"
+                             onclick="changeMainImage(this)" />
+                        <img src="~/images/@Model.Product.MainImg"
+                             class="img-thumbnail"
+                             width="80"
+                             onclick="changeMainImage(this)" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Details (Enhanced) -->
+            <div class="col-md-6">
+                <!-- Stock Status -->
+                <div class="d-flex gap-2 mb-3">
+                    @if (Model.Product.Quantity == 1)
+                    {
+                        <span class="badge bg-danger rounded-pill px-3 py-2">
+                            <i class="fas fa-exclamation-circle me-1"></i> Last Item!
+                        </span>
+                    }
+                    else if (Model.Product.Quantity > 1 && Model.Product.Quantity < 10)
+                    {
+                        <span class="badge bg-warning text-dark rounded-pill px-3 py-2">
+                            <i class="fas fa-box me-1"></i> Only @Model.Product.Quantity left
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success rounded-pill px-3 py-2">
+                            <i class="fas fa-check-circle me-1"></i> In Stock
+                        </span>
+                    }
+
+                    <span class="badge bg-dark rounded-pill px-3 py-2">
+                        <i class="fas fa-tag me-1"></i> @Model.Product.Category?.Name
+                    </span>
+                </div>
+
+                <h1 class="display-5 fw-bold text-dark mb-3">@Model.Product.Name</h1>
+
+                <!-- Rating (Visual Only) -->
+                <div class="mb-3">
+                    <div class="d-flex align-items-center">
+                        <div class="rating-stars me-2">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                <i class="fas fa-star @(i <= Model.Product.Rate ? "text-warning" : "text-secondary")"></i>
+                            }
+                        </div>
+                        <small class="text-muted">(Customer Reviews)</small>
+                    </div>
+                </div>
+
+                <!-- Price Display -->
+                <div class="mb-4">
+                    @if (Model.Product.Discount > 0)
+                    {
+                        <span class="text-muted text-decoration-line-through me-2">@Model.Product.Price.ToString("C")</span>
+                        <span class="h3 text-danger fw-bold">@((Model.Product.Price - (Model.Product.Price * Model.Product.Discount / 100)).ToString("C"))</span>
+                        <span class="badge bg-danger ms-2">Save @Model.Product.Discount%</span>
+                    }
+                    else
+                    {
+                        <span class="h3 fw-bold text-dark">@Model.Product.Price.ToString("C")</span>
+                    }
+                </div>
+
+                <!-- Product Description -->
+                <div class="mb-4">
+                    <h5 class="fw-bold mb-2">Product Details</h5>
+                    <p class="text-muted">@Model.Product.Description</p>
+                </div>
+
+                <!-- Key Features -->
+                <div class="mb-4">
+                    <h5 class="fw-bold mb-2">Key Features</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Premium quality materials</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Eco-friendly manufacturing</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 2-year warranty included</li>
+                    </ul>
+                </div>
+
+                <!-- Add to Cart (Enhanced) -->
+                <form asp-action="AddToCart" asp-controller="Cart" asp-area="Customer" class="mb-4">
+                    <input type="hidden" name="productId" value="@Model.Product.Id" />
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="quantity-selector border rounded-2">
+                            <button type="button" class="btn btn-link text-dark" onclick="decrementQuantity()">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <input class="form-control text-center border-0 quantity-input"
+                                   type="number"
+                                   value="1"
+                                   min="1"
+                                   max="@Model.Product.Quantity"
+                                   name="count"
+                                   style="width: 50px;" />
+                            <button type="button" class="btn btn-link text-dark" onclick="incrementQuantity()">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <button type="submit" class="btn btn-primary flex-grow-1 py-3">
+                            <i class="fas fa-shopping-cart me-2"></i> Add to Cart
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Additional Actions -->
+                <div class="d-flex gap-2">
+                    <button class="btn btn-outline-dark flex-grow-1">
+                        <i class="far fa-heart me-2"></i> Wishlist
+                    </button>
+                    <button class="btn btn-outline-dark flex-grow-1">
+                        <i class="fas fa-share-alt me-2"></i> Share
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Enhanced Related Products Section -->
+<section class="py-5 bg-light">
+    <div class="container px-4 px-lg-5">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <h2 class="fw-bold mb-0">Related Products</h2>
+            <a href="#" class="btn btn-outline-dark btn-sm">View All</a>
+        </div>
+
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4">
+            @foreach (var item in Model.RelatedProducts)
+            {
+                <div class="col mb-5">
+                    <div class="card h-100 product-card">
+                        <!-- Product image-->
+                        <img class="card-img-top p-3" src="~/images/@item.MainImg" alt="@item.Name" />
+
+                        <!-- Product details-->
+                        <div class="card-body p-4 pt-0">
+                            <div class="text-center">
+                                <!-- Category -->
+                                <div class="small mb-1 text-muted">@item.Category?.Name</div>
+                                <!-- Product name-->
+                                <h5 class="fw-bolder mb-2">@item.Name</h5>
+                                <!-- Product price-->
+                                <div class="mb-2">
+                                    @if (item.Discount > 0)
+                                    {
+                                        <span class="text-muted text-decoration-line-through small">@item.Price.ToString("C")</span>
+                                        <span class="text-danger fw-bold">@((item.Price - (item.Price * item.Discount / 100)).ToString("C"))</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="fw-bold">@item.Price.ToString("C")</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Product actions-->
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center">
+                                <a class="btn btn-outline-dark mt-auto" asp-action="Details" asp-route-id="@item.Id">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Top Products Section (Same enhanced style) -->
+<section class="py-5 bg-white">
+    <div class="container px-4 px-lg-5">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <h2 class="fw-bold mb-0">Top Products</h2>
+            <a href="#" class="btn btn-outline-dark btn-sm">View All</a>
+        </div>
+
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4">
+            @foreach (var item in Model.TopProducts)
+            {
+                <div class="col mb-5">
+                    <!-- Same card structure as Related Products -->
+                    <div class="card h-100 product-card">
+                        <img class="card-img-top p-3" src="~/images/@item.MainImg" alt="@item.Name" />
+                        <div class="card-body p-4 pt-0">
+                            <div class="text-center">
+                                <div class="small mb-1 text-muted">@item.Category?.Name</div>
+                                <h5 class="fw-bolder mb-2">@item.Name</h5>
+                                <div class="mb-2">
+                                    @if (item.Discount > 0)
+                                    {
+                                        <span class="text-muted text-decoration-line-through small">@item.Price.ToString("C")</span>
+                                        <span class="text-danger fw-bold">@((item.Price - (item.Price * item.Discount / 100)).ToString("C"))</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="fw-bold">@item.Price.ToString("C")</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center">
+                                <a class="btn btn-outline-dark mt-auto" asp-action="Details" asp-route-id="@item.Id">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Same Category Section (Same enhanced style) -->
+<section class="py-5 bg-light">
+    <div class="container px-4 px-lg-5">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <h2 class="fw-bold mb-0">More From This Category</h2>
+            <a href="#" class="btn btn-outline-dark btn-sm">View All</a>
+        </div>
+
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4">
+            @foreach (var item in Model.SameCategoryProducts)
+            {
+                <div class="col mb-5">
+                    <!-- Same card structure as Related Products -->
+                    <div class="card h-100 product-card">
+                        <img class="card-img-top p-3" src="~/images/@item.MainImg" alt="@item.Name" />
+                        <div class="card-body p-4 pt-0">
+                            <div class="text-center">
+                                <div class="small mb-1 text-muted">@item.Category?.Name</div>
+                                <h5 class="fw-bolder mb-2">@item.Name</h5>
+                                <div class="mb-2">
+                                    @if (item.Discount > 0)
+                                    {
+                                        <span class="text-muted text-decoration-line-through small">@item.Price.ToString("C")</span>
+                                        <span class="text-danger fw-bold">@((item.Price - (item.Price * item.Discount / 100)).ToString("C"))</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="fw-bold">@item.Price.ToString("C")</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center">
+                                <a class="btn btn-outline-dark mt-auto" asp-action="Details" asp-route-id="@item.Id">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+@section Styles {
+    <style>
+        /* Enhanced CSS without backend changes */
+        .product-card {
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+            .product-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            }
+
+        .active-thumbnail {
+            border-color: #0d6efd !important;
+            opacity: 1 !important;
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            background-color: #f8f9fa;
+        }
+
+        .quantity-input {
+            background: transparent;
+            -moz-appearance: textfield;
+        }
+
+            .quantity-input::-webkit-outer-spin-button,
+            .quantity-input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+
+        .rating-stars {
+            color: #ffc107;
+            font-size: 1.1rem;
+        }
+    </style>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // Simple image gallery functionality
+        function changeMainImage(element) {
+            const mainImg = document.querySelector('.card-img-top');
+            mainImg.src = element.src;
+
+            // Update active thumbnail
+            document.querySelectorAll('.img-thumbnail').forEach(thumb => {
+                thumb.classList.remove('active-thumbnail');
+            });
+            element.classList.add('active-thumbnail');
+        }
+
+        // Quantity controls
+        function incrementQuantity() {
+            const input = document.querySelector('.quantity-input');
+            if (parseInt(input.value) < parseInt(input.max)) {
+                input.value = parseInt(input.value) + 1;
+            }
+        }
+
+        function decrementQuantity() {
+            const input = document.querySelector('.quantity-input');
+            if (parseInt(input.value) > parseInt(input.min)) {
+                input.value = parseInt(input.value) - 1;
+            }
+        }
+    </script>
+}

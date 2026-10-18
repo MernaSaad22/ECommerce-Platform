@@ -1,0 +1,69 @@
+﻿
+
+
+
+
+                    @model ResendEmailVM
+
+@{
+    ViewData["Title"] = "Resend Email Confirmation";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title text-center">
+                        <i class="fas fa-envelope me-2"></i>Resend Email Confirmation
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" class="needs-validation" novalidate>
+                        <div class="mb-4">
+                            <p>Enter your email or username to resend the confirmation link</p>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="EmailOrUserName" class="form-label">Email or Username *</label>
+                            <input asp-for="EmailOrUserName" class="form-control" placeholder="Enter email or username" required>
+                            <span asp-validation-for="EmailOrUserName" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane me-1"></i> Resend Confirmation
+                            </button>
+                            <a asp-action="Login" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-1"></i> Back to Login
+                            </a>
+                
+                        </div>
+      
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Form validation
+        (function () {
+            'use strict'
+            const forms = document.querySelectorAll('.needs-validation')
+
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
+}

@@ -1,0 +1,80 @@
+﻿
+
+
+@model LoginVM
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title text-center">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label asp-for="EmailOrUserName" class="form-label">Email or Username *</label>
+                            <input asp-for="EmailOrUserName" class="form-control" placeholder="Enter email or username" required>
+                            <span asp-validation-for="EmailOrUserName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label">Password *</label>
+                            <input asp-for="Password" type="password" class="form-control" placeholder="Enter password" required>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input asp-for="RememberMe" type="checkbox" class="form-check-input">
+                            <label asp-for="RememberMe" class="form-check-label">Remember me</label>
+                        </div>
+
+                        <div class="d-grid gap-2 mb-3">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-sign-in-alt me-1"></i> Login
+                            </button>
+                        </div>
+
+                        <div class="text-center">
+                            <a asp-action="ForgetPassword" class="text-decoration-none">Forgot password?</a> |
+                            <a asp-action="Register" class="text-decoration-none">Create account</a>
+                            <a asp-action="ResendEmail" class="text-decoration-none">Didn't receive confirmation email?</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Form validation
+        (function () {
+            'use strict'
+            const forms = document.querySelectorAll('.needs-validation')
+
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
+}
+
+
+
+
+      
