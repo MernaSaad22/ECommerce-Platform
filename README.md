@@ -10,9 +10,9 @@ A fully-featured, enterprise-grade E-Commerce web application built with **ASP.N
 
 | 🛍️ Customer Experience | 👨‍💻 Admin Dashboard & Security |
 | :---: | :---: |
-| **Home Page & Dynamic Filters**<br>![Home](Screenshot%202026-10-18%20192304.png) | **Product Management (CRUD)**<br>![Products](Screenshot%202026-10-18%20204358.png) |
-| **Shopping Cart & Order Summary**<br>![Cart](Screenshot%202026-10-18%20204122.png) | **User Management & Instant Block**<br>![Users](Screenshot%202026-10-18%20204641.png) |
-| **Secure Payment Integration**<br>![Stripe](Screenshot%202026-10-18%20204316.png) | **Product Details**<br>![Details](Screenshot%202026-10-18%20204714.png) |
+| **Home Page & Dynamic Filters**<br>![Home](Screenshot%202026-10-18%20204122.png) | **Product Management (CRUD)**<br>![Products](Screenshot%202026-10-18%20204641.png) |
+| **Shopping Cart & Order Summary**<br>![Cart](Screenshot%202026-10-18%20204358.png) | **User Management & Instant Block**<br>![Users](Screenshot%202026-10-18%20204714.png) |
+| **Secure Payment Integration**<br>![Stripe](Screenshot%202026-10-18%20204502.png) | **Product Details**<br>![Details](Screenshot%202026-10-18%20204316.png) |
 
 ---
 
